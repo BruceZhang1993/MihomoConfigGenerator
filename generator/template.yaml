@@ -1,5 +1,5 @@
 dns:
-  nameserver-policy!:
+  nameserver-policy:
     +.qmai.cn: system
     +.qimai.shop: system
     +.qmai.co: system
