@@ -29,3 +29,5 @@ jobs:
         run: poetry install
       - name: Run tests
         run: poetry run pytest -v
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
