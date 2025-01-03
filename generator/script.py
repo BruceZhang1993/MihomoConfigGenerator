@@ -1,11 +1,9 @@
 import json
 import os
-import sys
+from pathlib import Path
+from typing import List
 
 import requests
-from typing import List
-from pathlib import Path
-
 import yaml
 
 
