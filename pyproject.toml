@@ -26,3 +26,6 @@ build-backend = "poetry.core.masonry.api"
 pythonpath = [
     "."
 ]
+
+[tool.poetry.scripts]
+mihomo_config_generator = "generator.script:main"

@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 from pathlib import Path
 from typing import List
 
@@ -41,3 +42,14 @@ def merge_proxies_into_template(proxies: List[dict]) -> str:
         data = yaml.load(template, Loader=yaml.FullLoader)
         data['proxies'] = proxies
         return yaml.dump(data)
+
+
+def main():
+    proxies = parse_proxies_from_env()
+    if proxies is None or len(proxies) == 0:
+        sys.exit(0)
+    yaml_str = merge_proxies_into_template(proxies)
+    home = Path(__file__).parent.parent
+    (home / 'result').mkdir(exist_ok=True)
+    with (home / 'result' / 'config.yml').open('w') as f:
+        f.write(yaml_str)
