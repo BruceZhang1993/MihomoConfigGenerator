@@ -3,7 +3,7 @@ import os
 
 from generator import script
 
-TEST_SUBSCRIPTION = 'https://raw.githubusercontent.com/BruceZhang1993/MihomoConfigGenerator/refs/heads/master/example/subscribe.yml'
+TEST_SUBSCRIPTION = 'https://raw.githubusercontent.com/BruceZhang1993/OpenMihomoConfigGenerator/refs/heads/master/example/subscribe.yml'
 os.environ['SUBSCRIPTIONS'] = json.dumps([TEST_SUBSCRIPTION])
 
 
