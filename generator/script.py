@@ -6,9 +6,14 @@ from typing import List
 import requests
 import yaml
 
+TOKEN = os.environ.get("MY_TOKEN")
+
 
 def parse_proxies_from_sub(sub: str) -> List[dict]:
-    response = requests.get(sub, headers={'User-Agent': 'clash.meta'})
+    headers = {'User-Agent': 'clash.meta'}
+    if TOKEN is not None:
+        headers['Authorization'] = f'token {TOKEN}'
+    response = requests.get(sub, headers=headers)
     sub_text = response.text
     data = yaml.load(sub_text, Loader=yaml.FullLoader)
     proxies = data.get('proxies')
