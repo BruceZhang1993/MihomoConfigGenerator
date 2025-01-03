@@ -30,4 +30,4 @@ jobs:
       - name: Run tests
         run: poetry run pytest -v
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MY_TOKEN: ${{ secrets.MY_TOKEN }}
