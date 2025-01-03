@@ -3,7 +3,8 @@ import os
 
 from generator import script
 
-TEST_SUBSCRIPTION = "https://raw.githubusercontent.com/BruceZhang1993/MihomoConfigGenerator/refs/heads/master/example/subscribe.yml"
+TOKEN = os.environ.get("GITHUB_TOKEN")
+TEST_SUBSCRIPTION = "https://raw.githubusercontent.com/BruceZhang1993/MihomoConfigGenerator/refs/heads/master/example/subscribe.yml?token=" + TOKEN
 os.environ['SUBSCRIPTIONS'] = json.dumps([TEST_SUBSCRIPTION])
 
 
