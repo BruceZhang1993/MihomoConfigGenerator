@@ -1,0 +1,31 @@
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ "3.13" ]
+        poetry-version: [ "1.8.5" ]
+        os: [ ubuntu-22.04 ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v4
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - name: Poetry update
+        run: poetry update
+      - name: Poetry install
+        run: poetry install
+      - name: Run tests
+        run: poetry run pytest -v

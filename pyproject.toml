@@ -6,7 +6,7 @@ authors = ["Bruce Zhang <zttt183525594@gmail.com>"]
 readme = "README.md"
 packages = [{ include = "generator" }]
 include = [
-    { path = "generator/template.yaml" },
+    { path = "generator/template.yml" },
 ]
 
 [tool.poetry.dependencies]

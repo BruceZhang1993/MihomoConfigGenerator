@@ -31,7 +31,7 @@ def parse_proxies_from_env() -> List[dict]:
 
 
 def merge_proxies_into_template(proxies: List[dict]) -> str:
-    with (Path(__file__).parent / 'template.yaml').open('r') as f:
+    with (Path(__file__).parent / 'template.yml').open('r') as f:
         template = f.read()
         data = yaml.load(template, Loader=yaml.FullLoader)
         data['proxies'] = proxies
