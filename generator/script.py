@@ -12,7 +12,10 @@ TOKEN = os.environ.get("MY_TOKEN")
 
 
 def mark_proxy_name(proxy, sub):
-    proxy['name'] = f'{proxy["name"]} [{urlparse(sub).hostname}]'
+    if sub == 'FILE':
+        proxy['name'] = f'{proxy["name"]} [FILE]'
+    else:
+        proxy['name'] = f'{proxy["name"]} [{urlparse(sub).hostname}]'
     return proxy
 
 
@@ -30,6 +33,7 @@ def parse_proxies_from_sub(sub: str) -> List[dict]:
 
 
 def parse_proxies_from_env() -> List[dict]:
+    # Read from subscription links
     subs = os.environ.get('SUBSCRIPTIONS')
     if subs is None:
         return []
@@ -39,6 +43,12 @@ def parse_proxies_from_env() -> List[dict]:
     proxy_list = []
     for sub in sub_list:
         proxy_list.extend(parse_proxies_from_sub(sub))
+    # Read from config file
+    file = os.environ.get('FILE')
+    if file is not None:
+        file_proxies = yaml.load(file, Loader=yaml.FullLoader)
+        if file_proxies is not None:
+            proxy_list.extend([mark_proxy_name(proxy, 'FILE') for proxy in file_proxies.get('proxies')])
     return proxy_list
 
 
