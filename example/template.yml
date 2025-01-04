@@ -107,11 +107,6 @@ proxy-groups:
     include-all-proxies: true
 
 rules:
-  - DOMAIN-SUFFIX,qmai.cn,DIRECT
-  - DOMAIN-SUFFIX,qimai.shop,DIRECT
-  - DOMAIN-SUFFIX,qmai.co,DIRECT
-  - DOMAIN-SUFFIX,zvcms.com,DIRECT
-  - DOMAIN-SUFFIX,zmcms.cn,DIRECT
   - RULE-SET,applications,DIRECT
   - DOMAIN,clash.razord.top,DIRECT
   - DOMAIN,yacd.haishan.me,DIRECT

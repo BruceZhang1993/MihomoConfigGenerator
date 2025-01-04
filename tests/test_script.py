@@ -5,6 +5,9 @@ from generator import script
 
 TEST_SUBSCRIPTION = 'https://raw.githubusercontent.com/BruceZhang1993/OpenMihomoConfigGenerator/refs/heads/master/example/subscribe.yml'
 os.environ['SUBSCRIPTIONS'] = json.dumps([TEST_SUBSCRIPTION])
+with open('example/template.yml', 'r') as f:
+    TEMPLATE = f.read()
+    os.environ['TEMPLATE'] = TEMPLATE
 
 
 def test_parse_proxies_from_sub():
