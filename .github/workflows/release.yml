@@ -31,6 +31,7 @@ jobs:
         run: poetry run mihomo_config_generator
         env:
           MY_TOKEN: ${{ secrets.MY_TOKEN }}
+          SUBSCRIPTIONS: ${{ env.SUBSCRIPTIONS }}
       - name: Create a release
         uses: softprops/action-gh-release@v2
         env:
