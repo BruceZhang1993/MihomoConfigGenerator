@@ -8,7 +8,6 @@ import requests
 import yaml
 
 TOKEN = os.environ.get("MY_TOKEN")
-TEMPLATE = os.environ.get("TEMPLATE")
 
 
 def parse_proxies_from_sub(sub: str) -> List[dict]:
@@ -38,7 +37,8 @@ def parse_proxies_from_env() -> List[dict]:
 
 
 def merge_proxies_into_template(proxies: List[dict]) -> str:
-    data = yaml.load(TEMPLATE, Loader=yaml.FullLoader)
+    template = os.environ.get("TEMPLATE")
+    data = yaml.load(template, Loader=yaml.FullLoader)
     data['proxies'] = proxies
     return yaml.dump(data)
 
