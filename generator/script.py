@@ -3,11 +3,17 @@ import os
 import sys
 from pathlib import Path
 from typing import List
+from urllib.parse import urlparse
 
 import requests
 import yaml
 
 TOKEN = os.environ.get("MY_TOKEN")
+
+
+def mark_proxy_name(proxy, sub):
+    proxy['name'] = f'{proxy["name"]} [{urlparse(sub).hostname}]'
+    return proxy
 
 
 def parse_proxies_from_sub(sub: str) -> List[dict]:
@@ -20,7 +26,7 @@ def parse_proxies_from_sub(sub: str) -> List[dict]:
     proxies = data.get('proxies')
     if proxies is None:
         return []
-    return proxies
+    return [mark_proxy_name(proxy, sub) for proxy in proxies]
 
 
 def parse_proxies_from_env() -> List[dict]:
