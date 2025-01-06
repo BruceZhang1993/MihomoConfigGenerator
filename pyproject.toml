@@ -28,3 +28,4 @@ pythonpath = [
 
 [tool.poetry.scripts]
 mihomo_config_generator = "generator.script:main"
+mihomo_speedtest = "generator.script:speedtest"

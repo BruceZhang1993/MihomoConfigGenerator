@@ -103,14 +103,28 @@ def exclude_timeout_proxies():
         result = core.proxy_delay(proxy['name'])
         if result is None or result.get('delay') is None:
             # delay timeout > 5000ms
-            logger.warning(f'Proxy {proxy["name"]} is removed for timeout!')
+            logger.warning(f'Proxy {proxy["name"]} is removed for timeout, err: {result}')
             continue
+        logger.info(f'Proxy {proxy["name"]} is ok, result: {result}')
         new_proxies.append(proxy)
     data['proxies'] = new_proxies
     with (home / 'result' / 'config_best.yml').open('w') as f:
         f.write(yaml.dump(data, allow_unicode=True))
         f.flush()
     core.stop()
+
+
+def speedtest():
+    config_url = 'https://github.com/BruceZhang1993/MihomoConfigGenerator/releases/download/pre-release/config.yml'
+    response = requests.get(config_url, stream=True)
+    home = Path(__file__).parent.parent
+    (home / 'result').mkdir(exist_ok=True)
+    with (home / 'result' / 'config.yml').open('wb') as f:
+        for chunk in response.iter_content(chunk_size=1024):
+            if chunk:
+                f.write(chunk)
+        f.flush()
+    exclude_timeout_proxies()
 
 
 def main():
@@ -123,4 +137,3 @@ def main():
     with (home / 'result' / 'config.yml').open('w') as f:
         f.write(yaml_str)
         f.flush()
-    # exclude_timeout_proxies()
