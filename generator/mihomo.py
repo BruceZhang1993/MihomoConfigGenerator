@@ -58,7 +58,7 @@ class MihomoCore:
         self.CORE_PATH.chmod(self.CORE_PATH.stat().st_mode | stat.S_IEXEC)
 
     def start_mihomo_core_process(self):
-        self.process = Popen([self.CORE_PATH, '-ext-ctl-unix', self.SOCKET_PATH, '-f', '../example/generated.yml'])
+        self.process = Popen([self.CORE_PATH, '-ext-ctl-unix', self.SOCKET_PATH])
         self.wait_for_unix_socket_ready()
 
     @property
