@@ -122,7 +122,7 @@ class MihomoCore:
         try:
             url = 'http://www.gstatic.com/generate_204'
             response = self.session.get(
-                f'http+unix://{urllib.parse.quote(self.SOCKET_PATH, safe="")}/proxies/PROXY/delay?url={urllib.parse.quote(url)}&timeout=5000')
+                f'http+unix://{urllib.parse.quote(self.SOCKET_PATH, safe="")}/proxies/{proxy_name}/delay?url={urllib.parse.quote(url)}&timeout=5000')
             return response.json()
         except Exception as e:
             logger.warning(f'Error accessing api proxy_delay: {e}')

@@ -84,7 +84,7 @@ def merge_proxies_into_template(proxies: List[dict]) -> str:
         sys.exit(1)
     data = yaml.load(template, Loader=yaml.FullLoader)
     data['proxies'] = list({proxy_unique_key(v): v for v in proxies}.values())
-    return yaml.dump(data)
+    return yaml.dump(data, allow_unicode=True)
 
 
 def main():

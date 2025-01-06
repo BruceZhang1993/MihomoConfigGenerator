@@ -111,8 +111,7 @@ proxies:
     type: ss
     udp: true
   - client-fingerprint: chrome
-    name: "\U0001F1E8\U0001F1F3|\u53F0\u6E7E/https://t.me/tiankongtzjz55|\u53F0\u6E7E\
-    |01 [aini.200566.xyz]"
+    name: "111"
     network: tcp
     port: 30332
     reality-opts:
@@ -123,8 +122,7 @@ proxies:
     tls: true
     type: vless
     uuid: 1a668915-d98f-4440-8bac-2c51d508f811
-  - name: "\U0001F1E8\U0001F1F3|\u53F0\u6E7E/https://t.me/tiankongtzjz55|\u53F0\u6E7E\
-    |02 [aini.200566.xyz]"
+  - name: "222"
     password: 1a668915-d98f-4440-8bac-2c51d508f811
     port: 30333
     server: ddns.200566.xyz
@@ -136,8 +134,7 @@ proxies:
       - h3
     congestion-control: bbr
     disable-sni: true
-    name: "\U0001F1E8\U0001F1F3|\u53F0\u6E7E/https://t.me/tiankongtzjz55|\u53F0\u6E7E\
-    |03 [aini.200566.xyz]"
+    name: "333"
     password: 1a668915-d98f-4440-8bac-2c51d508f811
     port: 30334
     server: ddns.200566.xyz
