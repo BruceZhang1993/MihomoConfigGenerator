@@ -22,7 +22,8 @@ class MihomoCore:
     SOCKET_PATH = '/tmp/mihomo.sock'
     CHUNK_SIZE = 8192
 
-    def __init__(self):
+    def __init__(self, config_file):
+        self.config_file = config_file
         self.process: Optional[Popen] = None
         result = self.download_mihomo_core()
         if not result:
@@ -58,7 +59,7 @@ class MihomoCore:
         self.CORE_PATH.chmod(self.CORE_PATH.stat().st_mode | stat.S_IEXEC)
 
     def start_mihomo_core_process(self):
-        self.process = Popen([self.CORE_PATH, '-ext-ctl-unix', self.SOCKET_PATH])
+        self.process = Popen([self.CORE_PATH, '-ext-ctl-unix', self.SOCKET_PATH, '-f', self.config_file])
         self.wait_for_unix_socket_ready()
 
     @property

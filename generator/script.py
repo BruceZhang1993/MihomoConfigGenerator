@@ -9,6 +9,8 @@ from loguru import logger
 import requests
 import yaml
 
+from generator.mihomo import MihomoCore
+
 TOKEN = os.environ.get("MY_TOKEN")
 
 
@@ -87,6 +89,30 @@ def merge_proxies_into_template(proxies: List[dict]) -> str:
     return yaml.dump(data, allow_unicode=True)
 
 
+def exclude_timeout_proxies():
+    home = Path(__file__).parent.parent
+    with (home / 'result' / 'config.yml').open('r') as f:
+        data = yaml.load(f, Loader=yaml.FullLoader)
+    core = MihomoCore((home / 'result' / 'config.yml').as_posix())
+    core.start_mihomo_core_process()
+    if not core.is_running:
+        logger.error('Failed to start mihomo core!')
+        sys.exit(1)
+    new_proxies = []
+    for proxy in data['proxies']:
+        result = core.proxy_delay(proxy['name'])
+        if result is None or result.get('delay') is None:
+            # delay timeout > 5000ms
+            logger.warning(f'Proxy {proxy["name"]} is removed for timeout!')
+            continue
+        new_proxies.append(proxy)
+    data['proxies'] = new_proxies
+    with (home / 'result' / 'config_best.yml').open('w') as f:
+        f.write(yaml.dump(data, allow_unicode=True))
+        f.flush()
+    core.stop()
+
+
 def main():
     proxies = parse_proxies_from_env()
     if proxies is None or len(proxies) == 0:
@@ -96,3 +122,4 @@ def main():
     (home / 'result').mkdir(exist_ok=True)
     with (home / 'result' / 'config.yml').open('w') as f:
         f.write(yaml_str)
+        f.flush()
