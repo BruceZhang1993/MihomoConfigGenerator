@@ -38,7 +38,7 @@ def test_merge_proxies_into_template():
 
 
 def test_proxy_delay_test():
-    core = MihomoCore()
+    core = MihomoCore(None)
     core.start_mihomo_core_process()
     assert core.is_running
     with open(Path(__file__).parent.parent / "example" / "generated.yml", 'r') as file:

@@ -59,7 +59,11 @@ class MihomoCore:
         self.CORE_PATH.chmod(self.CORE_PATH.stat().st_mode | stat.S_IEXEC)
 
     def start_mihomo_core_process(self):
-        self.process = Popen([self.CORE_PATH, '-ext-ctl-unix', self.SOCKET_PATH, '-f', self.config_file])
+        params = [self.CORE_PATH, '-ext-ctl-unix', self.SOCKET_PATH]
+        if self.config_file is not None:
+            params.append('-f')
+            params.append(self.config_file)
+        self.process = Popen(params)
         self.wait_for_unix_socket_ready()
 
     @property
