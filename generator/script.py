@@ -26,10 +26,13 @@ def parse_proxies_from_sub(sub: str) -> List[dict]:
         headers['Authorization'] = f'token {TOKEN}'
     response = requests.get(sub, headers=headers)
     if response.status_code != 200:
-        logger.error(f'Failed to get proxies from {sub}, http code: {response.status_code}!')
+        logger.warning(f'Failed to get proxies from {sub}, http code: {response.status_code}!')
         return []
     sub_text = response.text
     data = yaml.load(sub_text, Loader=yaml.FullLoader)
+    if data is None:
+        logger.warning(f'Failed to get proxies from {sub}, data is empty!')
+        return []
     proxies = data.get('proxies')
     if proxies is None:
         return []
