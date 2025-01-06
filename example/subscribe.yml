@@ -16,6 +16,7 @@ dns:
     fallback-filter: { geoip: true, ipcidr: [240.0.0.0/4, 0.0.0.0/32] }
 proxies:
     - { name: exampleName, type: trojan, server: 0.0.0.0, port: 443, password: password, network: ws, udp: true, sni: 0.0.0.0, skip-cert-verify: true }
+    - { name: exampleName2, type: trojan, server: 0.0.0.0, port: 443, password: password, network: ws, udp: true, sni: 0.0.0.0, skip-cert-verify: true }
 proxy-groups:
     - { name: 一元机场, type: select, proxies: ['exampleName'] }
     - { name: 自动选择, type: url-test, proxies: ['exampleName'], url: 'http://www.gstatic.com/generate_204', interval: 86400 }
