@@ -1,6 +1,7 @@
 import gzip
 import signal
 import stat
+import sys
 import urllib.parse
 from pathlib import Path
 from subprocess import Popen, TimeoutExpired
@@ -139,6 +140,9 @@ class MihomoCore:
 
     def wait_for_unix_socket_ready(self):
         for i in range(50):
+            if not self.is_running:
+                logger.error(f'Mihomo process exited unexpectedly ({self.process.returncode})')
+                sys.exit(99)
             logger.info(f"Waiting for mihomo socket to come online ({i})...")
             sleep(5)
             if self.version() is not None:
