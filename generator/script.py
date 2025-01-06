@@ -123,4 +123,4 @@ def main():
     with (home / 'result' / 'config.yml').open('w') as f:
         f.write(yaml_str)
         f.flush()
-    exclude_timeout_proxies()
+    # exclude_timeout_proxies()
