@@ -69,6 +69,13 @@ def parse_proxies_from_env() -> List[dict]:
     return proxy_list
 
 
+def proxy_unique_key(proxy):
+    type_ = proxy['type'] or None
+    server = proxy['server'] or None
+    port = proxy['port'] or None
+    return f'{type_}_{server}_{port}'
+
+
 def merge_proxies_into_template(proxies: List[dict]) -> str:
     logger.info(f'Merging {len(proxies)} proxies into template!')
     template = os.environ.get("TEMPLATE")
@@ -76,7 +83,7 @@ def merge_proxies_into_template(proxies: List[dict]) -> str:
         logger.error('Please set TEMPLATE GitHub Actions variable!')
         sys.exit(1)
     data = yaml.load(template, Loader=yaml.FullLoader)
-    data['proxies'] = proxies
+    data['proxies'] = list({proxy_unique_key(v): v for v in proxies}.values())
     return yaml.dump(data)
 
 
