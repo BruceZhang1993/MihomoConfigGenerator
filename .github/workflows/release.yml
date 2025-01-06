@@ -1,5 +1,7 @@
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 */2 * * *"
   push:
     tags:
       - "pre-release"
@@ -15,6 +17,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: pre-release
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
