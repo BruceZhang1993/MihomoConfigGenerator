@@ -1,12 +1,14 @@
 import gzip
 import signal
 import stat
+import urllib.parse
 from pathlib import Path
 from subprocess import Popen, TimeoutExpired
 from time import sleep
 from typing import Optional
 
 import requests
+import requests_unixsocket
 from loguru import logger
 
 
@@ -15,6 +17,7 @@ class MihomoCore:
     MIHOMO_CORE_URL = f"https://github.com/MetaCubeX/mihomo/releases/download/v{VERSION}/mihomo-linux-amd64-v{VERSION}.gz"
     PATH = Path(__file__).parent.parent / "mihomo.gz"
     CORE_PATH = Path(__file__).parent.parent / "mihomo"
+    SOCKET_PATH = '/tmp/mihomo.sock'
     CHUNK_SIZE = 8192
 
     def __init__(self):
@@ -23,6 +26,7 @@ class MihomoCore:
         if not result:
             raise Exception("Download mihomo core failed")
         self.unzip_mihomo_core()
+        self.session = requests_unixsocket.Session()
 
     def download_mihomo_core(self):
         if self.PATH.exists():
@@ -52,7 +56,8 @@ class MihomoCore:
         self.CORE_PATH.chmod(self.CORE_PATH.stat().st_mode | stat.S_IEXEC)
 
     def start_mihomo_core_process(self):
-        self.process = Popen([self.CORE_PATH])
+        self.process = Popen([self.CORE_PATH, '-ext-ctl-unix', self.SOCKET_PATH])
+        self.wait_for_unix_socket_ready()
 
     @property
     def is_running(self):
@@ -61,6 +66,9 @@ class MihomoCore:
         return self.process.poll() is None
 
     def stop(self):
+        if self.session is not None:
+            self.session.close()
+            self.session = None
         if self.process is None:
             return
         self.process.send_signal(signal.SIGINT)
@@ -70,12 +78,27 @@ class MihomoCore:
             self.process.terminate()
         self.process = None
 
+    def version(self):
+        try:
+            response = self.session.get(f'http+unix://{urllib.parse.quote(self.SOCKET_PATH, safe="")}/version')
+            return response.json()
+        except Exception:
+            return None
+
+    def wait_for_unix_socket_ready(self):
+        for i in range(10):
+            logger.info(f"Waiting for mihomo socket to come online ({i})...")
+            sleep(1)
+            if self.version() is not None:
+                return
+
 
 if __name__ == '__main__':
     core = MihomoCore()
     print(core.is_running)
     core.start_mihomo_core_process()
     print(core.is_running)
+    print(core.version())
     sleep(3)
     core.stop()
     print(core.is_running)
