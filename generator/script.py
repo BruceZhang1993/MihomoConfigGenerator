@@ -24,7 +24,11 @@ def parse_proxies_from_sub(sub: str) -> List[dict]:
     headers = {'User-Agent': 'clash.meta'}
     if TOKEN is not None:
         headers['Authorization'] = f'token {TOKEN}'
-    response = requests.get(sub, headers=headers)
+    try:
+        response = requests.get(sub, headers=headers)
+    except Exception as e:
+        logger.warning(f'Failed to get proxies from {sub}, exception: {e}!')
+        return []
     if response.status_code != 200:
         logger.warning(f'Failed to get proxies from {sub}, http code: {response.status_code}!')
         return []
