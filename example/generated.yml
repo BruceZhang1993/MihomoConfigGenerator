@@ -1,0 +1,157 @@
+allow-lan: false
+clash-for-android:
+  append-system-dns: false
+dns:
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+    - 180.184.1.1
+    - 114.114.114.114
+  enable: true
+  enhanced-mode: fake-ip
+  fake-ip-filter:
+    - '*'
+    - +.lan
+    - +.local
+    - time.*.com
+    - ntp.*.com
+    - +.market.xiaomi.com
+    - geosite:cn
+  fake-ip-range: 198.18.0.1/16
+  fallback: []
+  fallback-filter:
+    domain:
+      - +.google.com
+      - +.facebook.com
+      - +.twitter.com
+      - +.youtube.com
+      - +.xn--ngstr-lra8j.com
+      - +.google.cn
+      - +.googleapis.cn
+      - +.googleapis.com
+      - +.gvt1.com
+    geoip: true
+    geoip-code: CN
+    geosite:
+      - gfw
+    ipcidr:
+      - 240.0.0.0/4
+      - 0.0.0.0/32
+      - 127.0.0.1/32
+      - 61.160.148.90/32
+      - 124.236.16.201/32
+      - 182.43.124.6/32
+      - 106.74.25.198/32
+      - 120.222.19.204/32
+      - 221.228.32.13/32
+      - 211.137.117.149/32
+      - 36.135.82.110/32
+      - 183.203.36.36/32
+      - 111.28.0.32/32
+      - 117.156.25.11/32
+      - 120.204.204.201/32
+      - 120.209.204.204/32
+      - 211.138.218.190/32
+      - 183.252.183.9/32
+      - 117.187.10.42/32
+      - 218.203.122.98/32
+      - 221.180.160.221/32
+      - 111.31.192.110/32
+      - 221.130.39.3/32
+      - 120.209.204.20/32
+      - 218.201.25.129/32
+      - 211.139.145.129/32
+      - 36.138.129.47/32
+      - 112.54.50.50/32
+      - 111.22.226.1/32
+      - 111.63.132.170/32
+      - 111.44.246.131/32
+      - 112.17.14.211/32
+      - 111.22.226.1/32
+      - 47.92.198.202/32
+  ipv6: false
+  listen: 127.0.0.1:1053
+  nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+  nameserver-policy:
+    +.qimai.shop: system
+    +.qmai.cn: system
+    +.qmai.co: system
+    +.zmcms.cn: system
+    +.zvcms.com: system
+    geosite:cn,private,steam@cn,apple@cn,microsoft@cn,apple-cn,category-games@cn: 119.29.29.29
+  proxy-server-nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+  respect-rules: false
+  use-hosts: true
+  use-system-hosts: true
+external-controller: 127.0.0.1:9000
+ipv6: true
+log-level: info
+mixed-port: 17890
+mode: rule
+port: 17892
+profile:
+  store-fake-ip: true
+  store-selected: true
+  tracing: true
+proxies:
+  - cipher: rc4-md5
+    delay: 568
+    name: 中国 - 香港 - Akari Networks - 11 [raw.githubusercontent.com]
+    password: RenzheCloudSS
+    plugin: obfs
+    plugin-opts:
+      host: 78fe8292462.microsoft.com
+      mode: http
+    port: 3609
+    server: bs1.jymzffbquawl.com
+    type: ss
+    udp: true
+  - client-fingerprint: chrome
+    name: "\U0001F1E8\U0001F1F3|\u53F0\u6E7E/https://t.me/tiankongtzjz55|\u53F0\u6E7E\
+    |01 [aini.200566.xyz]"
+    network: tcp
+    port: 30332
+    reality-opts:
+      public-key: JKYZG1ImyL6B0TuQyE2XH0XWtX0pI6Cv0fe9ohsjcH0
+    server: ddns.200566.xyz
+    servername: addons.mozilla.org
+    skip-cert-verify: false
+    tls: true
+    type: vless
+    uuid: 1a668915-d98f-4440-8bac-2c51d508f811
+  - name: "\U0001F1E8\U0001F1F3|\u53F0\u6E7E/https://t.me/tiankongtzjz55|\u53F0\u6E7E\
+    |02 [aini.200566.xyz]"
+    password: 1a668915-d98f-4440-8bac-2c51d508f811
+    port: 30333
+    server: ddns.200566.xyz
+    skip-cert-verify: true
+    sni: ddns.200566.xyz
+    tfo: false
+    type: hysteria2
+  - alpn:
+      - h3
+    congestion-control: bbr
+    disable-sni: true
+    name: "\U0001F1E8\U0001F1F3|\u53F0\u6E7E/https://t.me/tiankongtzjz55|\u53F0\u6E7E\
+    |03 [aini.200566.xyz]"
+    password: 1a668915-d98f-4440-8bac-2c51d508f811
+    port: 30334
+    server: ddns.200566.xyz
+    skip-cert-verify: true
+    sni: ddns.200566.xyz
+    type: tuic
+    udp-relay_mode: native
+    uuid: 1a668915-d98f-4440-8bac-2c51d508f811
+    version: 5
+proxy-groups:
+  - include-all-proxies: true
+    name: PROXY
+    type: select
+redir-port: 0
+rules:
+  - MATCH,DIRECT
+socks-port: 7891

@@ -9,6 +9,7 @@ from typing import Optional
 
 import requests
 import requests_unixsocket
+import yaml
 from loguru import logger
 
 
@@ -56,7 +57,7 @@ class MihomoCore:
         self.CORE_PATH.chmod(self.CORE_PATH.stat().st_mode | stat.S_IEXEC)
 
     def start_mihomo_core_process(self):
-        self.process = Popen([self.CORE_PATH, '-ext-ctl-unix', self.SOCKET_PATH])
+        self.process = Popen([self.CORE_PATH, '-ext-ctl-unix', self.SOCKET_PATH, '-f', '../example/generated.yml'])
         self.wait_for_unix_socket_ready()
 
     @property
@@ -82,13 +83,64 @@ class MihomoCore:
         try:
             response = self.session.get(f'http+unix://{urllib.parse.quote(self.SOCKET_PATH, safe="")}/version')
             return response.json()
-        except Exception:
+        except Exception as e:
+            logger.warning(f'Error accessing api version: {e}')
+            return None
+
+    def put_configs(self, configs):
+        try:
+            print(configs)
+            response = self.session.put(
+                f'http+unix://{urllib.parse.quote(self.SOCKET_PATH, safe="")}/configs?force=true',
+                json=configs)
+            return response.text
+        except Exception as e:
+            logger.warning(f'Error accessing api put_configs: {e}')
+            return None
+
+    def configs(self):
+        try:
+            response = self.session.get(f'http+unix://{urllib.parse.quote(self.SOCKET_PATH, safe="")}/configs')
+            return response.json()
+        except Exception as e:
+            logger.warning(f'Error accessing api configs: {e}')
+            return None
+
+    def put_proxy(self, proxy_data):
+        try:
+            print(proxy_data)
+            response = self.session.put(
+                f'http+unix://{urllib.parse.quote(self.SOCKET_PATH, safe="")}/providers/proxies/default',
+                json=proxy_data)
+            print(response)
+            return response.text
+        except Exception as e:
+            logger.warning(f'Error accessing api put_proxy: {e}')
+            return None
+
+    def proxy_delay(self, proxy_name):
+        try:
+            url = 'http://www.gstatic.com/generate_204'
+            response = self.session.get(
+                f'http+unix://{urllib.parse.quote(self.SOCKET_PATH, safe="")}/proxies/PROXY/delay?url={urllib.parse.quote(url)}&timeout=5000')
+            return response.json()
+        except Exception as e:
+            logger.warning(f'Error accessing api proxy_delay: {e}')
+            return None
+
+    def proxies(self):
+        try:
+            response = self.session.get(
+                f'http+unix://{urllib.parse.quote(self.SOCKET_PATH, safe="")}/proxies')
+            return response.json()
+        except Exception as e:
+            logger.warning(f'Error accessing api proxies: {e}')
             return None
 
     def wait_for_unix_socket_ready(self):
-        for i in range(10):
+        for i in range(50):
             logger.info(f"Waiting for mihomo socket to come online ({i})...")
-            sleep(1)
+            sleep(5)
             if self.version() is not None:
                 return
 
@@ -99,6 +151,15 @@ if __name__ == '__main__':
     core.start_mihomo_core_process()
     print(core.is_running)
     print(core.version())
-    sleep(3)
+    with open(Path(__file__).parent.parent / "example" / "generated.yml", 'r') as f:
+        data = yaml.load(f, Loader=yaml.FullLoader)
+        core.put_configs(data)
+    sleep(5)
+    print("==============================")
+    for k, v in core.proxies()['proxies'].items():
+        if k in ('COMPATIBLE', 'DIRECT', 'GLOBAL', 'PASS', 'PROXY', 'REJECT', 'REJECT-DROP'):
+            continue
+        print(k, '=>', core.proxy_delay(k))
+    sleep(10)
     core.stop()
     print(core.is_running)
