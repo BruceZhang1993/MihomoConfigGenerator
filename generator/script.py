@@ -55,7 +55,7 @@ def parse_proxies_from_env() -> List[dict]:
     # Read from config file
     file = os.environ.get('FILE')
     if file is not None:
-        logger.info(f'Reading proxies from file {file}!')
+        logger.info(f'Reading proxies from file!')
         file_proxies = yaml.load(file, Loader=yaml.FullLoader)
         if file_proxies is not None:
             logger.info(f'Got {len(file_proxies.get("proxies"))} proxies from file!')
