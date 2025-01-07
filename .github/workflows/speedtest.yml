@@ -31,3 +31,14 @@ jobs:
           SUBSCRIPTIONS: ${{ vars.SUBSCRIPTIONS }}
           FILE: ${{ vars.FILE }}
           TEMPLATE: ${{ vars.TEMPLATE }}
+      - name: Create a release
+        uses: softprops/action-gh-release@v2
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: Generated config
+          prerelease: true
+          files: |
+            result/config_best_50.yml
+            result/config_best_100.yml
+          tag_name: pre-release

@@ -106,9 +106,15 @@ def exclude_timeout_proxies():
             logger.warning(f'Proxy {proxy["name"]} is removed for timeout, err: {result}')
             continue
         logger.info(f'Proxy {proxy["name"]} is ok, result: {result}')
+        proxy['delay'] = result['delay']
         new_proxies.append(proxy)
-    data['proxies'] = new_proxies
-    with (home / 'result' / 'config_best.yml').open('w') as f:
+    new_proxies = sorted(new_proxies, key=lambda x: x['delay'])
+    data['proxies'] = new_proxies[0:50]
+    with (home / 'result' / 'config_best_50.yml').open('w') as f:
+        f.write(yaml.dump(data, allow_unicode=True))
+        f.flush()
+    data['proxies'] = new_proxies[0:100]
+    with (home / 'result' / 'config_best_100.yml').open('w') as f:
         f.write(yaml.dump(data, allow_unicode=True))
         f.flush()
     core.stop()
