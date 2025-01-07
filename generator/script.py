@@ -85,7 +85,16 @@ def merge_proxies_into_template(proxies: List[dict]) -> str:
         logger.error('Please set TEMPLATE GitHub Actions variable!')
         sys.exit(1)
     data = yaml.load(template, Loader=yaml.FullLoader)
-    data['proxies'] = list({proxy_unique_key(v): v for v in proxies}.values())
+    unique_proxies = list({proxy_unique_key(v): v for v in proxies}.values())
+    name_set = set()
+    for i, proxy in enumerate(unique_proxies):
+        name = proxy.get('name')
+        if name is None:
+            continue
+        if name in name_set:
+            unique_proxies[i]['name'] = f'{name}_{i}'
+        name_set.add(name)
+    data['proxies'] = unique_proxies
     return yaml.dump(data, allow_unicode=True)
 
 
