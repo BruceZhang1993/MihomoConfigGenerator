@@ -104,6 +104,7 @@ def exclude_timeout_proxies():
         data = yaml.load(f, Loader=yaml.FullLoader)
     core = MihomoCore((home / 'result' / 'config.yml').as_posix())
     core.start_mihomo_core_process()
+    core.patch_configs({'tun': {'enable': False}})
     if not core.is_running:
         logger.error('Failed to start mihomo core!')
         sys.exit(1)

@@ -153,6 +153,16 @@ class MihomoCore:
             if self.version() is not None:
                 return
 
+    def patch_configs(self, param):
+        try:
+            response = self.session.patch(
+                f'http+unix://{urllib.parse.quote(self.SOCKET_PATH, safe="")}/configs?force=true',
+                json=param)
+            return response.text
+        except Exception as e:
+            logger.warning(f'Error accessing api patch_configs: {e}')
+            return None
+
 
 if __name__ == '__main__':
     core = MihomoCore()
