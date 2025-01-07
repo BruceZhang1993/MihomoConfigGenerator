@@ -72,9 +72,9 @@ def parse_proxies_from_env() -> List[dict]:
 
 
 def proxy_unique_key(proxy):
-    type_ = proxy['type'] or None
-    server = proxy['server'] or None
-    port = proxy['port'] or None
+    type_ = proxy.get('type')
+    server = proxy.get('server')
+    port = proxy.get('port')
     return f'{type_}_{server}_{port}'
 
 
