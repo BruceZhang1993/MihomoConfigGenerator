@@ -98,6 +98,24 @@ def merge_proxies_into_template(proxies: List[dict]) -> str:
     return yaml.dump(data, allow_unicode=True)
 
 
+def get_bad_proxy_names():
+    home = Path(__file__).parent.parent
+    with (home / 'result' / 'config.yml').open('r') as f:
+        data = yaml.load(f, Loader=yaml.FullLoader)
+    core = MihomoCore((home / 'result' / 'config.yml').as_posix())
+    core.start_mihomo_core_process()
+    core.patch_configs({'tun': {'enable': False}})
+    if not core.is_running:
+        logger.error('Failed to start mihomo core!')
+        sys.exit(1)
+    bad_proxies = []
+    for proxy in data['proxies']:
+        result = core.proxy_delay(proxy['name'])
+        if result is None or result.get('delay') is None:
+            bad_proxies.append(proxy['name'])
+    return bad_proxies
+
+
 def exclude_timeout_proxies():
     home = Path(__file__).parent.parent
     with (home / 'result' / 'config.yml').open('r') as f:
@@ -140,7 +158,8 @@ def speedtest():
             if chunk:
                 f.write(chunk)
         f.flush()
-    exclude_timeout_proxies()
+    bad_proxies = get_bad_proxy_names()
+    logger.info(f'Bad proxy names: {json.dumps(bad_proxies)}')
 
 
 def main():
