@@ -104,13 +104,13 @@ def get_bad_proxy_names():
         data = yaml.load(f, Loader=yaml.FullLoader)
     core = MihomoCore((home / 'result' / 'config.yml').as_posix())
     core.start_mihomo_core_process()
-    core.patch_configs({'tun': {'enable': False}})
     if not core.is_running:
         logger.error('Failed to start mihomo core!')
         sys.exit(1)
     bad_proxies = []
     for proxy in data['proxies']:
         result = core.proxy_delay(proxy['name'])
+        logger.info(f'Proxy {proxy["name"]} is done, result: {result}')
         if result is None or result.get('delay') is None:
             bad_proxies.append(proxy['name'])
     return bad_proxies
@@ -122,7 +122,6 @@ def exclude_timeout_proxies():
         data = yaml.load(f, Loader=yaml.FullLoader)
     core = MihomoCore((home / 'result' / 'config.yml').as_posix())
     core.start_mihomo_core_process()
-    core.patch_configs({'tun': {'enable': False}})
     if not core.is_running:
         logger.error('Failed to start mihomo core!')
         sys.exit(1)

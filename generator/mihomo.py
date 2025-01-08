@@ -126,9 +126,10 @@ class MihomoCore:
 
     def proxy_delay(self, proxy_name):
         try:
-            url = 'http://www.gstatic.com/generate_204'
+            print(proxy_name)
+            url = 'https://www.gstatic.com/generate_204'
             response = self.session.get(
-                f'http+unix://{urllib.parse.quote(self.SOCKET_PATH, safe="")}/proxies/{urllib.parse.quote(proxy_name, safe="")}/delay?url={urllib.parse.quote(url)}&timeout=5000')
+                f'http+unix://{urllib.parse.quote(self.SOCKET_PATH, safe="")}/proxies/{urllib.parse.quote(proxy_name, safe="")}/delay?url={urllib.parse.quote(url)}&timeout=3000')
             return response.json()
         except Exception as e:
             logger.warning(f'Error accessing api proxy_delay: {e}')
