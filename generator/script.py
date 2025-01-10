@@ -15,10 +15,7 @@ TOKEN = os.environ.get("MY_TOKEN")
 
 
 def mark_proxy_name(proxy, sub_name):
-    if sub == 'FILE':
-        proxy['name'] = f'{proxy["name"]} [FILE]'
-    else:
-        proxy['name'] = f'{proxy["name"]} [{sub_name}]'
+    proxy['name'] = f'{proxy["name"]} [{sub_name}]'
     return proxy
 
 
