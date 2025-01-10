@@ -14,36 +14,42 @@ from generator.mihomo import MihomoCore
 TOKEN = os.environ.get("MY_TOKEN")
 
 
-def mark_proxy_name(proxy, sub):
+def mark_proxy_name(proxy, sub_name):
     if sub == 'FILE':
         proxy['name'] = f'{proxy["name"]} [FILE]'
     else:
-        proxy['name'] = f'{proxy["name"]} [{urlparse(sub).hostname}]'
+        proxy['name'] = f'{proxy["name"]} [{sub_name}]'
     return proxy
 
 
-def parse_proxies_from_sub(sub: str) -> List[dict]:
+def parse_proxies_from_sub(sub: str | dict) -> List[dict]:
     headers = {'User-Agent': 'clash.meta'}
     if TOKEN is not None:
         headers['Authorization'] = f'token {TOKEN}'
+    if isinstance(sub, dict):
+        sub_url = sub.get('url')
+        sub_name = sub.get('name')
+    else:
+        sub_url = sub
+        sub_name = urlparse(sub).hostname
     try:
-        response = requests.get(sub, headers=headers)
+        response = requests.get(sub_url, headers=headers)
     except Exception as e:
-        logger.warning(f'Failed to get proxies from {sub}, exception: {e}!')
+        logger.warning(f'Failed to get proxies from {sub_url}, exception: {e}!')
         return []
     if response.status_code != 200:
-        logger.warning(f'Failed to get proxies from {sub}, http code: {response.status_code}!')
+        logger.warning(f'Failed to get proxies from {sub_url}, http code: {response.status_code}!')
         return []
     sub_text = response.text
     data = yaml.load(sub_text, Loader=yaml.FullLoader)
     if data is None:
-        logger.warning(f'Failed to get proxies from {sub}, data is empty!')
+        logger.warning(f'Failed to get proxies from {sub_url}, data is empty!')
         return []
     proxies = data.get('proxies')
     if proxies is None:
         return []
-    logger.info(f'Got {len(proxies)} proxies from {sub}!')
-    return [mark_proxy_name(proxy, sub) for proxy in proxies]
+    logger.info(f'Got {len(proxies)} proxies from {sub_url}!')
+    return [mark_proxy_name(proxy, sub_name) for proxy in proxies]
 
 
 def parse_proxies_from_env() -> List[dict]:

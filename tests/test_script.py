@@ -9,7 +9,7 @@ from generator import script
 from generator.mihomo import MihomoCore
 
 TEST_SUBSCRIPTION = 'https://raw.githubusercontent.com/BruceZhang1993/MihomoConfigGenerator/refs/heads/master/example/subscribe.yml'
-os.environ['SUBSCRIPTIONS'] = json.dumps([TEST_SUBSCRIPTION])
+os.environ['SUBSCRIPTIONS'] = json.dumps([{'name': 'TEST', 'url': TEST_SUBSCRIPTION}])
 f = open(Path(__file__).parent.parent / "example" / "template.yml", 'r')
 os.environ['TEMPLATE'] = f.read()
 f.close()
