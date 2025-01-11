@@ -2,7 +2,7 @@
 
 ### Usage
 
-1. Fork this repository and make it private.
+1. Fork this repository
 2. Create a token from https://github.com/settings/tokens .
 3. In repository settings, Actions -> General -> Workflow permissions, check `Read and write permissions`.
 4. In repository settings, Secrets and variables -> Actions -> Secrets -> New repository secret, create a secret named `MY_TOKEN` and paste the token.
