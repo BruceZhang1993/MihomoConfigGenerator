@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install geoip
-        run: sudo apt-get install -y geoip geoip-database
+        run: sudo apt-get install -y geoip-bin geoip-database
       - uses: actions/checkout@v4
       - name: Setup Python
         uses: actions/setup-python@v5
