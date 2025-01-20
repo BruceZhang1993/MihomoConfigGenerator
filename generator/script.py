@@ -102,7 +102,7 @@ def merge_proxies_into_template(proxies: List[dict]) -> str:
 
 
 def get_bad_proxy_names():
-    home = Path(__file__).parent.parent
+    home = Path('/tmp')
     with (home / 'result' / 'config.yml').open('r') as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
     core = MihomoCore((home / 'result' / 'config.yml').as_posix())
@@ -151,9 +151,12 @@ def exclude_timeout_proxies():
 
 
 def speedtest():
-    config_url = 'https://github.com/BruceZhang1993/MihomoConfigGenerator/releases/download/pre-release/config.yml'
+    if len(sys.argv) < 2:
+        logger.error('Please set config url as argument!')
+        sys.exit(1)
+    config_url = sys.argv[1]
     response = requests.get(config_url, stream=True)
-    home = Path(__file__).parent.parent
+    home = Path('/tmp')
     (home / 'result').mkdir(exist_ok=True)
     with (home / 'result' / 'config.yml').open('wb') as f:
         for chunk in response.iter_content(chunk_size=1024):

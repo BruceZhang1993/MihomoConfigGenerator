@@ -18,3 +18,8 @@
 gh variable set SUBSCRIPTIONS '["url1","url2"]'
 gh workflow run release.yml --ref pre-release
 ```
+
+#### How to test latency of subscription before adding to configuation
+```shell
+poetry run mihomo_speedtest [URL]
+```
