@@ -38,7 +38,7 @@ def parse_proxies_from_sub(sub: str | dict) -> List[dict]:
         logger.warning(f'Failed to get proxies from {sub_url}, http code: {response.status_code}!')
         return []
     sub_text = response.text
-    data = yaml.load(sub_text, Loader=yaml.FullLoader)
+    data = yaml.load(sub_text, Loader=yaml.Loader)
     if data is None:
         logger.warning(f'Failed to get proxies from {sub_url}, data is empty!')
         return []
@@ -65,7 +65,7 @@ def parse_proxies_from_env() -> List[dict]:
     file = os.environ.get('FILE')
     if file is not None:
         logger.info(f'Reading proxies from file!')
-        file_proxies = yaml.load(file, Loader=yaml.FullLoader)
+        file_proxies = yaml.load(file, Loader=yaml.Loader)
         if file_proxies is not None:
             logger.info(f'Got {len(file_proxies.get("proxies"))} proxies from file!')
             proxy_list.extend([mark_proxy_name(proxy, 'FILE') for proxy in file_proxies.get('proxies')])
@@ -87,7 +87,7 @@ def merge_proxies_into_template(proxies: List[dict], template_name: str = 'TEMPL
     if template is None:
         logger.error('Please set TEMPLATE GitHub Actions variable!')
         sys.exit(1)
-    data = yaml.load(template, Loader=yaml.FullLoader)
+    data = yaml.load(template, Loader=yaml.Loader)
     unique_proxies = list({proxy_unique_key(v): v for v in proxies}.values())
     name_set = set()
     for i, proxy in enumerate(unique_proxies):
@@ -104,7 +104,7 @@ def merge_proxies_into_template(proxies: List[dict], template_name: str = 'TEMPL
 def get_bad_proxy_names():
     home = Path('/tmp')
     with (home / 'result' / 'config.yml').open('r') as f:
-        data = yaml.load(f, Loader=yaml.FullLoader)
+        data = yaml.load(f, Loader=yaml.Loader)
     core = MihomoCore((home / 'result' / 'config.yml').as_posix())
     core.start_mihomo_core_process()
     if not core.is_running:
@@ -122,7 +122,7 @@ def get_bad_proxy_names():
 def exclude_timeout_proxies():
     home = Path(__file__).parent.parent
     with (home / 'result' / 'config.yml').open('r') as f:
-        data = yaml.load(f, Loader=yaml.FullLoader)
+        data = yaml.load(f, Loader=yaml.Loader)
     core = MihomoCore((home / 'result' / 'config.yml').as_posix())
     core.start_mihomo_core_process()
     if not core.is_running:
