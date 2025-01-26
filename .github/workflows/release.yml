@@ -38,6 +38,7 @@ jobs:
           SUBSCRIPTIONS: ${{ vars.SUBSCRIPTIONS }}
           FILE: ${{ vars.FILE }}
           TEMPLATE: ${{ vars.TEMPLATE }}
+          TEMPLATE_BLACK: ${{ vars.TEMPLATE_BLACK }}
       - name: Create a release
         uses: softprops/action-gh-release@v2
         env:
@@ -47,5 +48,5 @@ jobs:
           prerelease: true
           files: |
             result/config.yml
-            result/config_best.yml
+            result/config_black.yml
           tag_name: pre-release

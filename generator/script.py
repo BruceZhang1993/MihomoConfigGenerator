@@ -81,9 +81,9 @@ def proxy_unique_key(proxy):
     return f'{type_}_{server}_{port}'
 
 
-def merge_proxies_into_template(proxies: List[dict]) -> str:
+def merge_proxies_into_template(proxies: List[dict], template_name: str = 'TEMPLATE') -> str:
     logger.info(f'Merging {len(proxies)} proxies into template!')
-    template = os.environ.get("TEMPLATE")
+    template = os.environ.get(template_name)
     if template is None:
         logger.error('Please set TEMPLATE GitHub Actions variable!')
         sys.exit(1)
@@ -171,9 +171,13 @@ def main():
     proxies = parse_proxies_from_env()
     if proxies is None or len(proxies) == 0:
         sys.exit(0)
-    yaml_str = merge_proxies_into_template(proxies)
+    yaml_str = merge_proxies_into_template(proxies, 'TEMPLATE')
     home = Path(__file__).parent.parent
     (home / 'result').mkdir(exist_ok=True)
     with (home / 'result' / 'config.yml').open('w') as f:
         f.write(yaml_str)
+        f.flush()
+    yaml_str_black = merge_proxies_into_template(proxies, 'TEMPLATE_BLACK')
+    with (home / 'result' / 'config_black.yml').open('w') as f:
+        f.write(yaml_str_black)
         f.flush()
