@@ -53,3 +53,9 @@ def test_proxy_delay_test():
         print(k, '=>', result)
     sleep(3)
     core.stop()
+
+def test_bad_yaml_data():
+    yaml.add_constructor('str', lambda loader, node: node.value, yaml.Loader)
+    data1 = 'type: trojan\npassword: !<str> 123456'
+    resolved1 = yaml.load(data1, Loader=yaml.Loader)
+    print(resolved1)
