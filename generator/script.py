@@ -192,7 +192,3 @@ def main():
     with (home / 'result' / 'config.yml').open('w') as f:
         f.write(yaml_str)
         f.flush()
-    yaml_str_black = merge_proxies_into_template(proxies, 'TEMPLATE_BLACK')
-    with (home / 'result' / 'config_black.yml').open('w') as f:
-        f.write(yaml_str_black)
-        f.flush()
