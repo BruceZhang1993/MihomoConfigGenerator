@@ -16,6 +16,7 @@ yaml = ry.YAML()
 yaml.preserve_quotes = True
 yaml.allow_unicode = True
 
+
 def proxy_after_handle(proxy, sub_name):
     proxy['name'] = f'{proxy["name"]} [{sub_name}]'
     if 'reality-opts' in proxy and 'short-id' in proxy['reality-opts'] and proxy['reality-opts']['short-id'][0] == '\'':
@@ -102,7 +103,17 @@ def merge_proxies_into_template(proxies: List[dict], template_name: str = 'TEMPL
             unique_proxies[i]['name'] = f'{name}_{i}'
         name_set.add(name)
     data['proxies'] = unique_proxies
-    return yaml.dump(data)
+    return yaml_dump_to_str(data)
+
+
+def yaml_dump_to_str(obj, options=None):
+    if options is None: options = {}
+    from io import StringIO
+    string_stream = StringIO()
+    yaml.dump(obj, string_stream, **options)
+    output_str = string_stream.getvalue()
+    string_stream.close()
+    return output_str
 
 
 def get_bad_proxy_names():
