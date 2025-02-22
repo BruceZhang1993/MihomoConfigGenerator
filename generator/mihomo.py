@@ -15,6 +15,7 @@ from loguru import logger
 
 yaml = ry.YAML()
 yaml.preserve_quotes = True
+yaml.allow_unicode = True
 
 class MihomoCore:
     VERSION = "1.19.1"
@@ -174,7 +175,7 @@ if __name__ == '__main__':
     print(core.is_running)
     print(core.version())
     with open(Path(__file__).parent.parent / "example" / "generated.yml", 'r') as f:
-        data = yaml.load(f, Loader=yaml.FullLoader)
+        data = yaml.load(f)
         core.put_configs(data)
     sleep(5)
     print("==============================")
