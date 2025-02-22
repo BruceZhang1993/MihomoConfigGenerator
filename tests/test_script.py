@@ -3,10 +3,14 @@ import os
 from pathlib import Path
 from time import sleep
 
-import yaml
+import ruamel.yaml as ry
 
 from generator import script
 from generator.mihomo import MihomoCore
+
+yaml = ry.YAML()
+yaml.preserve_quotes = True
+yaml.allow_unicode = True
 
 TEST_SUBSCRIPTION = 'https://raw.githubusercontent.com/BruceZhang1993/MihomoConfigGenerator/refs/heads/master/example/subscribe.yml'
 os.environ['SUBSCRIPTIONS'] = json.dumps([{'name': 'TEST', 'url': TEST_SUBSCRIPTION}])
