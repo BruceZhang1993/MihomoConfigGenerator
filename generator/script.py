@@ -171,8 +171,6 @@ def speedtest():
 
 
 def main():
-    # Compatible with some special format YAML
-    yaml.add_constructor('str', lambda loader, node: node.value, yaml.Loader)
     proxies = parse_proxies_from_env()
     if proxies is None or len(proxies) == 0:
         sys.exit(0)
