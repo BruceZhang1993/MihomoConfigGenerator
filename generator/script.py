@@ -14,6 +14,7 @@ from generator.mihomo import MihomoCore
 TOKEN = os.environ.get("MY_TOKEN")
 yaml = ry.YAML()
 yaml.preserve_quotes = True
+yaml.allow_unicode = True
 
 def proxy_after_handle(proxy, sub_name):
     proxy['name'] = f'{proxy["name"]} [{sub_name}]'
@@ -41,7 +42,7 @@ def parse_proxies_from_sub(sub: str | dict) -> List[dict]:
         logger.warning(f'Failed to get proxies from {sub_url}, http code: {response.status_code}!')
         return []
     sub_text = response.text
-    data = yaml.load(sub_text, Loader=yaml.Loader)
+    data = yaml.load(sub_text)
     if data is None:
         logger.warning(f'Failed to get proxies from {sub_url}, data is empty!')
         return []
@@ -68,7 +69,7 @@ def parse_proxies_from_env() -> List[dict]:
     file = os.environ.get('FILE')
     if file is not None:
         logger.info(f'Reading proxies from file!')
-        file_proxies = yaml.load(file, Loader=yaml.Loader)
+        file_proxies = yaml.load(file)
         if file_proxies is not None:
             logger.info(f'Got {len(file_proxies.get("proxies"))} proxies from file!')
             proxy_list.extend([proxy_after_handle(proxy, 'FILE') for proxy in file_proxies.get('proxies')])
@@ -90,7 +91,7 @@ def merge_proxies_into_template(proxies: List[dict], template_name: str = 'TEMPL
     if template is None:
         logger.error('Please set TEMPLATE GitHub Actions variable!')
         sys.exit(1)
-    data = yaml.load(template, Loader=yaml.Loader)
+    data = yaml.load(template)
     unique_proxies = list({proxy_unique_key(v): v for v in proxies}.values())
     name_set = set()
     for i, proxy in enumerate(unique_proxies):
@@ -101,13 +102,13 @@ def merge_proxies_into_template(proxies: List[dict], template_name: str = 'TEMPL
             unique_proxies[i]['name'] = f'{name}_{i}'
         name_set.add(name)
     data['proxies'] = unique_proxies
-    return yaml.dump(data, allow_unicode=True)
+    return yaml.dump(data)
 
 
 def get_bad_proxy_names():
     home = Path('/tmp')
     with (home / 'result' / 'config.yml').open('r') as f:
-        data = yaml.load(f, Loader=yaml.Loader)
+        data = yaml.load(f)
     core = MihomoCore((home / 'result' / 'config.yml').as_posix())
     core.start_mihomo_core_process()
     if not core.is_running:
@@ -125,7 +126,7 @@ def get_bad_proxy_names():
 def exclude_timeout_proxies():
     home = Path(__file__).parent.parent
     with (home / 'result' / 'config.yml').open('r') as f:
-        data = yaml.load(f, Loader=yaml.Loader)
+        data = yaml.load(f)
     core = MihomoCore((home / 'result' / 'config.yml').as_posix())
     core.start_mihomo_core_process()
     if not core.is_running:
@@ -144,11 +145,11 @@ def exclude_timeout_proxies():
     new_proxies = sorted(new_proxies, key=lambda x: x['delay'])
     data['proxies'] = new_proxies[0:50]
     with (home / 'result' / 'config_best_50.yml').open('w') as f:
-        f.write(yaml.dump(data, allow_unicode=True))
+        f.write(yaml.dump(data))
         f.flush()
     data['proxies'] = new_proxies[0:100]
     with (home / 'result' / 'config_best_100.yml').open('w') as f:
-        f.write(yaml.dump(data, allow_unicode=True))
+        f.write(yaml.dump(data))
         f.flush()
     core.stop()
 
