@@ -46,7 +46,7 @@ def test_proxy_delay_test():
     core.start_mihomo_core_process()
     assert core.is_running
     with open(Path(__file__).parent.parent / "example" / "generated.yml", 'r') as file:
-        data = yaml.load(file, Loader=yaml.FullLoader)
+        data = yaml.load(file)
         core.put_configs(data)
     sleep(3)
     print("==============================")
@@ -59,9 +59,8 @@ def test_proxy_delay_test():
     core.stop()
 
 def test_bad_yaml_data():
-    yaml.add_constructor('str', lambda loader, node: node.value, yaml.Loader)
     data1 = 'type: trojan\npassword: !<str> 123456'
-    resolved1 = yaml.load(data1, Loader=yaml.Loader)
+    resolved1 = yaml.load(data1)
     print(resolved1)
 
 def test_proxy_after_handle():
