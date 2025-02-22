@@ -7,12 +7,13 @@ from urllib.parse import urlparse
 from loguru import logger
 
 import requests
-import yaml
+import ruamel.yaml as ry
 
 from generator.mihomo import MihomoCore
 
 TOKEN = os.environ.get("MY_TOKEN")
-
+yaml = ry.YAML()
+yaml.preserve_quotes = True
 
 def proxy_after_handle(proxy, sub_name):
     proxy['name'] = f'{proxy["name"]} [{sub_name}]'
