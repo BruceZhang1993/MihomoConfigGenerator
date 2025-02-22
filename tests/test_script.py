@@ -59,3 +59,6 @@ def test_bad_yaml_data():
     data1 = 'type: trojan\npassword: !<str> 123456'
     resolved1 = yaml.load(data1, Loader=yaml.Loader)
     print(resolved1)
+
+def test_proxy_after_handle():
+    script.proxy_after_handle({'name': 'test', 'type': 'trojan', 'password': '123456', 'reality-opts': {'short-id': '7266000000'}}, 'test')

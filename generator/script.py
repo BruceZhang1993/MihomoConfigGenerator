@@ -14,8 +14,10 @@ from generator.mihomo import MihomoCore
 TOKEN = os.environ.get("MY_TOKEN")
 
 
-def mark_proxy_name(proxy, sub_name):
+def proxy_after_handle(proxy, sub_name):
     proxy['name'] = f'{proxy["name"]} [{sub_name}]'
+    if 'reality-opts' in proxy and 'short-id' in proxy['reality-opts']:
+        proxy['reality-opts']['short-id'] = f"'{proxy['reality-opts']['short-id']}'"
     return proxy
 
 
@@ -46,7 +48,7 @@ def parse_proxies_from_sub(sub: str | dict) -> List[dict]:
     if proxies is None:
         return []
     logger.info(f'Got {len(proxies)} proxies from {sub_url}!')
-    return [mark_proxy_name(proxy, sub_name) for proxy in proxies]
+    return [proxy_after_handle(proxy, sub_name) for proxy in proxies]
 
 
 def parse_proxies_from_env() -> List[dict]:
@@ -68,7 +70,7 @@ def parse_proxies_from_env() -> List[dict]:
         file_proxies = yaml.load(file, Loader=yaml.Loader)
         if file_proxies is not None:
             logger.info(f'Got {len(file_proxies.get("proxies"))} proxies from file!')
-            proxy_list.extend([mark_proxy_name(proxy, 'FILE') for proxy in file_proxies.get('proxies')])
+            proxy_list.extend([proxy_after_handle(proxy, 'FILE') for proxy in file_proxies.get('proxies')])
         else:
             logger.info(f'Got 0 proxies from file {file}!')
     return proxy_list
