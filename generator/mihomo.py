@@ -10,9 +10,11 @@ from typing import Optional
 
 import requests
 import requests_unixsocket
-import yaml
+import ruamel.yaml as ry
 from loguru import logger
 
+yaml = ry.YAML()
+yaml.preserve_quotes = True
 
 class MihomoCore:
     VERSION = "1.19.1"
