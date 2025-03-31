@@ -35,20 +35,23 @@ def parse_proxies_from_sub(sub: str | dict) -> List[dict]:
     try:
         response = requests.get(sub_url, headers=headers)
     except Exception as e:
-        logger.warning(f'Failed to get proxies from {sub_url}, exception: {e}!')
+        logger.warning(f'Failed to get proxies from [{sub_name}]{sub_url}, exception: {e}!')
         return []
     if response.status_code != 200:
-        logger.warning(f'Failed to get proxies from {sub_url}, http code: {response.status_code}!')
+        logger.warning(f'Failed to get proxies from [{sub_name}]{sub_url}, http code: {response.status_code}!')
         return []
     sub_text = response.text
     data = yaml.load(sub_text)
     if data is None:
-        logger.warning(f'Failed to get proxies from {sub_url}, data is empty!')
+        logger.warning(f'Failed to get proxies from [{sub_name}]{sub_url}, data is empty!')
+        return []
+    if not isinstance(data, dict):
+        logger.warning(f'Failed to get proxies from [{sub_name}]{sub_url}, data is not dict!')
         return []
     proxies = data.get('proxies')
     if proxies is None:
         return []
-    logger.info(f'Got {len(proxies)} proxies from {sub_url}!')
+    logger.info(f'Got {len(proxies)} proxies from [{sub_name}]{sub_url}!')
     return [proxy_after_handle(proxy, sub_name) for proxy in proxies]
 
 
