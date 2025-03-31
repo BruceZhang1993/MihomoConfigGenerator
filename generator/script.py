@@ -19,8 +19,6 @@ yaml.allow_unicode = True
 
 def proxy_after_handle(proxy, sub_name):
     proxy['name'] = f'{proxy["name"]} [{sub_name}]'
-    if 'reality-opts' in proxy and 'short-id' in proxy['reality-opts'] and proxy['reality-opts']['short-id'][0] == '\'':
-        proxy['reality-opts']['short-id'] = '\'' + proxy['reality-opts']['short-id'] + '\''
     return proxy
 
 
