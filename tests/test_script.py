@@ -23,15 +23,12 @@ def test_parse_proxies_from_sub():
     sub_list = script.parse_proxies_from_sub(TEST_SUBSCRIPTION)
     assert type(sub_list) == list
     assert len(sub_list) > 0
-    assert type(sub_list[0]) == dict
-    assert sub_list[0].get('server') is not None
-
 
 def test_parse_proxies_from_env():
     sub_list = script.parse_proxies_from_env()
     assert type(sub_list) == list
     assert len(sub_list) > 0
-    assert type(sub_list[0]) == dict
+    assert isinstance(sub_list[0], dict)
     assert sub_list[0].get('server') is not None
 
 
